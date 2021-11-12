@@ -9,7 +9,7 @@ ui <- fluidPage(
   
   sidebarLayout(
     sidebarPanel(
-      helpText("Select 2 genes to examine correlation. Data collected from TCGA-BRCA"),
+      helpText("Select 2 genes to examine correlation", p("(use ENSEMBL identifiers)", style = "color:red"), "Data collected from TCGA-BRCA"),
       
       checkboxGroupInput("checkGroup", label = h3("Tissue type"), 
                          choices = list("Primary solid Tumor" = 1, "Solid Tissue Normal" = 2, "Metastatic" = 3),
