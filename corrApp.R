@@ -2,6 +2,9 @@
 library(shiny)
 
 # Source helpers ----
+source("helpers.R")
+source("packages.R")
+TCGA <- read.csv( "DGAT2_todo_RNAseq.csv", row.names = 1)
 
 # User interface ----
 ui <- fluidPage(
@@ -9,21 +12,16 @@ ui <- fluidPage(
   
   sidebarLayout(
     sidebarPanel(
-      helpText("Select 2 genes to examine correlation", p("(use ENSEMBL identifiers)", style = "color:red"), "Data collected from TCGA-BRCA"),
+      helpText("Select 2 genes to examine correlation", p("(use Gene Symbol ID)", style = "color:red"), "Data collected from TCGA-BRCA"),
       
-      checkboxGroupInput("checkGroup", label = h3("Tissue type"), 
-                         choices = list("Primary solid Tumor" = 1, "Solid Tissue Normal" = 2, "Metastatic" = 3),
-                         selected = 1),
-      
-      checkboxGroupInput("checkGroup2", label = h3("BRCA subtype"), 
-                         choices = list("Luminal A" = 1, "Luminal B" = 2, "Her2" = 3, "Basal" = 4, "Normal" = 5, "NA" = 6),
-                         selected = c(1,2,3,4,5,6)),
+      checkboxGroupInput("checkGroup", label = h3("BRCA subtype"), 
+                         choices = list("Luminal A" = "LumA", "Luminal B" = "LumB", "Her2" = "Her2", "Basal" = "Basal", "Normal" = "Normal", "NA" = "NA"),
+                         selected = c("LumA", "LumB", "Her2", "Basal", "Normal", "NA")),
       
       textInput("text", label = h3("Gene 1"), value = "Enter text..."),
       
       textInput("text2", label = h3("Gene 2"), value = "Enter text...")
     ),
-    
     
     mainPanel(plotOutput("plot"))
   )
@@ -31,6 +29,28 @@ ui <- fluidPage(
 
 # Server logic
 server <- function(input, output) {
+  
+  sub_fun <- function(subtypes) {
+    # sub function to create table
+    # this does not have any reactive element inside
+    TCGA[TCGA$PAM_50 %in% subtypes, , drop = FALSE]
+  }
+  
+  get_table <- eventReactive({input$checkGroup}, {
+    # reactive function to define the configulation
+    sub_fun(as.character(input$checkGroup))
+  })  
+  
+  symbol1 <- reactive({
+    as.character(input$text)
+    })
+  
+  symbol2 <- reactive({
+    as.character(input$text2)
+  })
+  
+  output$plot <- renderPlot({ scaTTerplot(get_table(), symbol1(), symbol2())
+    })
 }
 
 # Run the app
