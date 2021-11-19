@@ -1,0 +1,11 @@
+name: rshiny_tcga-brca
+title:
+username:
+account: xaitorx
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 5159843
+bundleId: 5268637
+url: https://xaitorx.shinyapps.io/rshiny_tcga-brca/
+when: 1637281661.72515
+lastSyncTime: 1637281661.72515

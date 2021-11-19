@@ -1,10 +1,13 @@
 # Load packages ----
 library(shiny)
+library(BiocManager)
+options(repos = BiocManager::repositories())
+
 
 # Source helpers ----
-source("helpers.R")
-source("packages.R")
-TCGA <- read.csv( "DGAT2_todo_RNAseq.csv", row.names = 1)
+source("helpers/helpers.R")
+source("helpers/packages.R")
+TCGA <- read.csv( "data/DGAT2_todo_RNAseq.csv", row.names = 1)
 
 # User interface ----
 ui <- fluidPage(
@@ -18,9 +21,9 @@ ui <- fluidPage(
                          choices = list("Luminal A" = "LumA", "Luminal B" = "LumB", "Her2" = "Her2", "Basal" = "Basal", "Normal" = "Normal", "NA" = "NA"),
                          selected = c("LumA", "LumB", "Her2", "Basal", "Normal", "NA")),
       
-      textInput("text", label = h3("Gene 1"), value = "Enter text..."),
+      textInput("text", label = h3("Gene 1"), value = "DGAT2"),
       
-      textInput("text2", label = h3("Gene 2"), value = "Enter text...")
+      textInput("text2", label = h3("Gene 2"), value = "CD59")
     ),
     
     mainPanel(plotOutput("plot"))
